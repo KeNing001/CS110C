@@ -34,7 +34,8 @@ public class LinkedFrontBackCappedList<T extends Comparable<? super T>>
 		if (isFull()) {
 			return false;
 		}
-		Node newNode = new Node(newEntry, head);
+		Node newNode = new Node(newEntry);
+		newNode.setNextNode(head);
 		head = newNode;
 		if (isEmpty()) {
 			tail = head;
@@ -52,7 +53,7 @@ public class LinkedFrontBackCappedList<T extends Comparable<? super T>>
 			return addFront(newEntry);
 		}
 		Node newNode = new Node(newEntry);
-		tail.next = newNode;
+		tail.setNextNode(newNode);
 		tail = newNode;
 		size++;
 		return true;
@@ -64,12 +65,15 @@ public class LinkedFrontBackCappedList<T extends Comparable<? super T>>
 			return null;
 		}
 		Node removeNode = head;
-		head = head.next;
+		head = head.getNextNode();
 		size--;
 		if (0 == size) {
 			tail = null;
 		}
-		return removeNode.data;
+		
+		T removeDataFront = removeNode.getData();
+		removeNode.setData(null);
+		return removeDataFront;
 	}
 
 	@Override
@@ -87,10 +91,13 @@ public class LinkedFrontBackCappedList<T extends Comparable<? super T>>
 				current = current.next;
 			}
 			tail = current;
-			tail.next = null;
+			tail.setNextNode(null);
 		}
 		size--;
-		return removeNode.data;
+		
+		T removeDataBack = removeNode.getData();
+		removeNode.setData(null);
+		return removeDataBack;
 	}
 
 	@Override
