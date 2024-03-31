@@ -12,7 +12,9 @@
  * @purpose: Implements the interface, the class uses linked nodes to implement the list.
  * @version 0.1
 */
-public class LinkedFrontBackCappedList<T> implements FrontBackCappedList<T>, Comparable<LinkedFrontBackCappedList<T>> {
+public class LinkedFrontBackCappedList<T extends Comparable<? super T>> 
+   implements FrontBackCappedList<T>,  
+   Comparable<LinkedFrontBackCappedList<T>> {
 
 	private Node head, tail;
 	private int size, capacity;
@@ -188,8 +190,37 @@ public class LinkedFrontBackCappedList<T> implements FrontBackCappedList<T>, Com
 	}
 
 	@Override
-	public int compareTo(LinkedFrontBackCappedList<T> o) {
-		// TODO Auto-generated method stub
+	public int compareTo(LinkedFrontBackCappedList<T> other) {
+		if (size == 0 || other.size == 0) {
+			if (size > other.size) {
+				return 1;
+			}
+			else if (size < other.size) {
+				return -1;
+			}
+		return 0;			
+		}
+
+		Node current = head;
+		Node otherCurrent = other.head;
+		for (int i = 0; i < size; i++){
+			if (current.getData().compareTo(otherCurrent.getData()) < 0){
+				return -1;
+			}
+			else if (current.getData().compareTo(otherCurrent.getData()) > 0){
+				return 1;
+			}
+			current = current.getNextNode();
+			
+			otherCurrent = otherCurrent.getNextNode();
+
+			if (current == null && otherCurrent != null){
+				return -1;
+			}
+			else if (otherCurrent == null && current != null){
+				return 1;		
+			}		
+		}
 		return 0;
 	}
 
